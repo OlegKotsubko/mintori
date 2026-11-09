@@ -8,8 +8,9 @@ export function generateStaticParams() {
   return CARDS.map((c) => ({ slug: c.slug }));
 }
 
-export function generateMetadata({ params }: { params: { slug: string } }): Metadata {
-  const c = getCard(params.slug);
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+  const { slug } = await params;
+  const c = getCard(slug);
   if (!c) return {};
   const set = getSet(c.setSlug)!;
   return {
@@ -18,8 +19,9 @@ export function generateMetadata({ params }: { params: { slug: string } }): Meta
   };
 }
 
-export default function Page({ params }: { params: { slug: string } }) {
-  const card = getCard(params.slug);
+export default async function Page({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
+  const card = getCard(slug);
   if (!card) notFound();
   const set = getSet(card.setSlug)!;
   const related = [...cardsInSet(set).filter((c) => c.slug !== card.slug && c.price > 5).slice(0, 6), ...CARDS.filter((c) => c.setSlug !== card.setSlug && c.game === card.game)].slice(0, 6);

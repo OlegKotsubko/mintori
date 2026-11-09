@@ -11,13 +11,15 @@ import { SetBrowser } from "./SetBrowser";
 export function generateStaticParams() {
   return SETS.map((s) => ({ slug: s.slug }));
 }
-export function generateMetadata({ params }: { params: { slug: string } }): Metadata {
-  const s = getSet(params.slug);
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+  const { slug } = await params;
+  const s = getSet(slug);
   return s ? { title: `${s.name} price guide & card list`, description: `All ${s.total} cards in ${s.name} with live market prices, rarity and sealed product prices.` } : {};
 }
 
-export default function SetPage({ params }: { params: { slug: string } }) {
-  const set = getSet(params.slug);
+export default async function SetPage({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
+  const set = getSet(slug);
   if (!set) notFound();
   const cards = cardsInSet(set);
   const sealed = SEALED.filter((p) => p.setSlug === set.slug);

@@ -1,5 +1,5 @@
 "use client";
-import { createContext, useCallback, useContext, useEffect, useState } from "react";
+import { createContext, useCallback, useContext, useState, useSyncExternalStore } from "react";
 import { LoginModal } from "./LoginModal";
 import { Check } from "./Icons";
 
@@ -11,6 +11,15 @@ type Ctx = {
   toggleTheme: () => void;
 };
 const AppCtx = createContext<Ctx | null>(null);
+
+// The theme lives on <html class="light">, set before hydration by the inline script in app/layout.tsx.
+const subscribeTheme = (onChange: () => void) => {
+  const observer = new MutationObserver(onChange);
+  observer.observe(document.documentElement, { attributes: true, attributeFilter: ["class"] });
+  return () => observer.disconnect();
+};
+const getTheme = () => (document.documentElement.classList.contains("light") ? "light" : "dark");
+const getServerTheme = () => "dark" as const;
 export const useApp = () => {
   const c = useContext(AppCtx);
   if (!c) throw new Error("useApp outside <Providers>");
@@ -21,19 +30,12 @@ export function Providers({ children }: { children: React.ReactNode }) {
   const [cartCount, setCart] = useState(3);
   const [login, setLogin] = useState(false);
   const [toast, setToast] = useState<string | null>(null);
-  const [theme, setTheme] = useState<"dark" | "light">("dark");
-
-  useEffect(() => {
-    setTheme(document.documentElement.classList.contains("light") ? "light" : "dark");
-  }, []);
+  const theme = useSyncExternalStore(subscribeTheme, getTheme, getServerTheme);
 
   const toggleTheme = useCallback(() => {
-    setTheme((t) => {
-      const next = t === "dark" ? "light" : "dark";
-      document.documentElement.classList.toggle("light", next === "light");
-      try { localStorage.setItem("mintori-theme", next); } catch {}
-      return next;
-    });
+    const next = getTheme() === "dark" ? "light" : "dark";
+    document.documentElement.classList.toggle("light", next === "light");
+    try { localStorage.setItem("mintori-theme", next); } catch {}
   }, []);
 
   const addToCart = useCallback((label: string) => {

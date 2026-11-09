@@ -19,10 +19,16 @@ export function LoginModal({ open, onClose }: { open: boolean; onClose: () => vo
   const first = useRef<HTMLButtonElement>(null);
   const [email, setEmail] = useState("");
   const [sent, setSent] = useState(false);
+  const [wasOpen, setWasOpen] = useState(open);
+
+  // Reset the "link sent" view each time the modal opens.
+  if (open !== wasOpen) {
+    setWasOpen(open);
+    if (open) setSent(false);
+  }
 
   useEffect(() => {
     if (!open) return;
-    setSent(false);
     first.current?.focus();
     const onKey = (e: KeyboardEvent) => e.key === "Escape" && onClose();
     document.addEventListener("keydown", onKey);
