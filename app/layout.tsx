@@ -1,0 +1,63 @@
+import type { Metadata, Viewport } from "next";
+import Link from "next/link";
+import "@fontsource-variable/manrope";
+import "./globals.css";
+import { Providers } from "@/components/Providers";
+import { Header } from "@/components/Header";
+import { Logo } from "@/components/Icons";
+import { TrustBadges } from "@/components/Blocks";
+
+export const metadata: Metadata = {
+  title: { default: "Mintori — Trading card prices, marketplace & collection tracker", template: "%s | Mintori" },
+  description: "Transparent prices for Pokémon TCG and sports cards. Buy from verified sellers with insured shipping, and track your collection’s value for free.",
+};
+export const viewport: Viewport = { themeColor: "#0B0C0F", width: "device-width", initialScale: 1 };
+
+const themeInit = `try{if(localStorage.getItem('mintori-theme')==='light')document.documentElement.classList.add('light')}catch(e){}`;
+
+export default function RootLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <html lang="en-US" suppressHydrationWarning>
+      <head><script dangerouslySetInnerHTML={{ __html: themeInit }} /></head>
+      <body className="min-h-screen pb-16 md:pb-0">
+        <Providers>
+          <a href="#main" className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded-lg focus:bg-gold focus:px-3 focus:py-2 focus:text-gold-ink">Skip to content</a>
+          <Header />
+          <main id="main">{children}</main>
+          <Footer />
+        </Providers>
+      </body>
+    </html>
+  );
+}
+
+function Footer() {
+  const cols = [
+    { h: "Marketplace", l: ["Pokémon TCG", "Football", "Basketball", "Baseball", "Sealed products"] },
+    { h: "Price guide", l: ["Trending cards", "Set index", "Population reports", "Grading ROI calculator"] },
+    { h: "Mintori", l: ["How we price", "Seller standards", "Buyer protection", "Help center"] },
+  ];
+  return (
+    <footer className="mt-24 border-t border-line">
+      <div className="container py-12">
+        <TrustBadges layout="strip" className="justify-center" />
+        <div className="mt-10 grid gap-10 md:grid-cols-[1.4fr_repeat(3,1fr)]">
+          <div>
+            <Logo />
+            <p className="mt-3 max-w-xs text-sm text-muted">The trusted price guide and marketplace for collectors. Real cards, real prices — no digital rips, no gambling.</p>
+          </div>
+          {cols.map((c) => (
+            <div key={c.h}>
+              <p className="text-sm font-semibold">{c.h}</p>
+              <ul className="mt-3 space-y-2">{c.l.map((x) => <li key={x}><Link href="#" className="text-sm text-muted hover:text-ink">{x}</Link></li>)}</ul>
+            </div>
+          ))}
+        </div>
+        <p className="mt-12 text-xs leading-relaxed text-faint">
+          © 2026 Mintori, Inc. · Serving collectors in the United States. Prices are market estimates based on completed sales and are not financial advice.
+          All card names and artwork shown are placeholders. Mintori is not affiliated with any card manufacturer, league or grading company.
+        </p>
+      </div>
+    </footer>
+  );
+}

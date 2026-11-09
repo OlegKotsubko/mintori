@@ -1,0 +1,132 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ------------------------------------------------------------------
+   Theme tokens (RGB triplets). Dark is the default; .light overrides.
+   All text/background pairs below meet WCAG AA (≥ 4.5:1 for body text).
+   ------------------------------------------------------------------ */
+:root {
+  --font-sans: "Manrope Variable", "Manrope";
+  --bg: 11 12 15;          /* #0B0C0F near-black            */
+  --surface: 20 22 27;     /* #14161B card surfaces         */
+  --elevated: 28 31 38;    /* #1C1F26 popovers, inputs      */
+  --line: 43 47 56;        /* #2B2F38 hairlines             */
+  --ink: 242 243 245;      /* #F2F3F5 primary text  16.9:1  */
+  --muted: 161 167 179;    /* #A1A7B3 secondary     7.4:1   */
+  --faint: 133 140 153;    /* #858C99 tertiary      4.8:1   */
+  --gold: 233 185 73;      /* #E9B949 accent                */
+  --gold-ink: 26 19 5;     /* text on gold          11:1    */
+  --gold-soft: 233 185 73; /* used with /10 alpha           */
+  --gold-text: 233 185 73; /* gold as text on dark  9.6:1   */
+  --up: 61 220 143;        /* #3DDC8F               9.9:1   */
+  --down: 255 112 112;     /* #FF7070               6.4:1   */
+  --info: 125 170 255;
+  --holo: linear-gradient(115deg, #ffd27a 0%, #ff9ad5 22%, #9ec9ff 44%, #8fffd6 64%, #ffe58a 84%, #ffd27a 100%);
+  color-scheme: dark;
+}
+.light {
+  --bg: 247 246 242;
+  --surface: 255 255 255;
+  --elevated: 250 249 246;
+  --line: 226 224 218;
+  --ink: 15 17 21;
+  --muted: 82 88 99;       /* 7.0:1 on white */
+  --faint: 104 110 122;    /* 5.1:1 on white */
+  --gold: 226 174 58;
+  --gold-ink: 26 19 5;
+  --gold-soft: 226 174 58;
+  --gold-text: 138 90 0;   /* 5.9:1 on white */
+  --up: 11 122 69;         /* 5.3:1 */
+  --down: 194 49 42;       /* 5.4:1 */
+  --info: 37 99 235;
+  color-scheme: light;
+}
+
+@layer base {
+  html { -webkit-tap-highlight-color: transparent; }
+  body {
+    @apply bg-bg text-ink font-sans antialiased;
+    font-feature-settings: "ss01", "cv11";
+  }
+  /* Every number on Mintori is tabular. */
+  .num, table, [data-num] { font-variant-numeric: tabular-nums; font-feature-settings: "tnum"; }
+  :focus-visible { outline: 2px solid rgb(var(--gold)); outline-offset: 2px; border-radius: 6px; }
+  ::selection { background: rgb(var(--gold) / 0.35); }
+}
+
+@layer components {
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-xl px-4 h-11 text-sm font-semibold transition
+           disabled:opacity-50 disabled:pointer-events-none whitespace-nowrap;
+  }
+  .btn-primary { @apply btn bg-gold text-gold-ink hover:brightness-110 active:brightness-95 shadow-gold; }
+  .btn-secondary { @apply btn bg-elevated text-ink border border-line hover:border-faint; }
+  .btn-ghost { @apply btn text-muted hover:text-ink hover:bg-elevated; }
+  .btn-outline-gold { @apply btn border border-gold/60 text-gold-text hover:bg-gold/10; }
+
+  .panel { @apply bg-surface border border-line rounded-xl2; }
+  .chip {
+    @apply inline-flex items-center gap-1.5 h-9 px-3.5 rounded-full border text-sm font-medium transition
+           border-line text-muted hover:text-ink hover:border-faint;
+  }
+  .chip[aria-pressed="true"], .chip[aria-checked="true"] {
+    @apply border-gold text-ink bg-gold/10;
+  }
+  .eyebrow { @apply text-xs font-semibold uppercase tracking-[0.14em] text-faint; }
+  .h-section { @apply text-lg md:text-xl font-semibold tracking-tight; }
+  .input {
+    @apply h-11 w-full rounded-xl bg-elevated border border-line px-3.5 text-sm text-ink placeholder:text-faint
+           focus:border-gold focus:outline-none;
+  }
+  .select {
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAQCAYAAAAMJL+VAAAABGdBTUEAALGPC/xhBQAAAQtJREFUOBG1lEEOgjAQRalbGj2OG9caOACn4ALGtfEuHACiazceR1PWOH/CNA3aMiTaBDpt/7zPdBKy7M/DCL9pGkvxxVp7KsvyJftL5rZt1865M+Ucq6pyyF3hNcI7Cuu+728QYn/JQA5yKaempxuZmQngOwEaYx55nu+1lQh8GIatMGi+01NwBcEmhxBqK4nAPZJ78K0KKFAJmR3oPp8+Iwgob0Oa6+TLoeCvRx+mTUYf/FVBGTPRwDkfLxnaSrRwcH0FWhNOmrkWYbE2XEicqgSa1J0LQ+aPCuQgZiLnwewbGuz5MGoAhcIkCQcjaTBjMgtXGURMVHC1wcQEy0J+Zlj8bKAnY1/UzDe2dbAVqfXn6wAAAABJRU5ErkJggg==');
+    background-size: 0.5rem;
+    background-position: right 0.7rem center;
+    background-repeat: no-repeat;
+    padding-right: 2rem;
+    @apply appearance-none;
+  }
+  .scroll-row { @apply relative flex gap-4 overflow-x-auto snap-x snap-mandatory pb-2 -mx-4 px-4 lg:mx-0 lg:px-0; scrollbar-width: none; }
+  .scroll-row::-webkit-scrollbar { display: none; }
+}
+
+/* Holographic foil — used ONLY on rare cards, badges and highlights. */
+.holo-text {
+  background: var(--holo); background-size: 200% 100%;
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+  animation: holo 6s linear infinite;
+}
+.holo-border { position: relative; }
+.holo-border::before {
+  content: ""; position: absolute; inset: -1px; border-radius: inherit; padding: 1px;
+  background: var(--holo); background-size: 200% 100%; animation: holo 6s linear infinite;
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor; mask-composite: exclude; pointer-events: none;
+}
+.holo-bg { background: var(--holo); background-size: 200% 100%; animation: holo 6s linear infinite; }
+
+/* Card tilt + shine (values set by CardImage via CSS vars). */
+.tilt { transform: perspective(900px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)); transition: transform .25s ease-out; }
+.tilt-shine {
+  background: radial-gradient(circle at var(--mx, 50%) var(--my, 30%), rgb(255 255 255 / .28), transparent 45%);
+  mix-blend-mode: overlay; opacity: var(--shine, 0); transition: opacity .25s;
+}
+.tilt-foil {
+  background: var(--holo); background-size: 220% 220%;
+  background-position: var(--mx, 50%) var(--my, 50%);
+  mix-blend-mode: color-dodge; opacity: calc(var(--shine, 0) * .35 + .08);
+}
+
+/* Skeleton shimmer */
+.skeleton { @apply relative overflow-hidden rounded-lg bg-elevated; }
+.skeleton::after {
+  content: ""; position: absolute; inset: 0; transform: translateX(-100%);
+  background: linear-gradient(90deg, transparent, rgb(255 255 255 / .05), transparent);
+  animation: shimmer 1.6s infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
+  .tilt { transform: none !important; }
+}
