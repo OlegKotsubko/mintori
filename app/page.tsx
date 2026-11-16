@@ -9,7 +9,9 @@ import { SectionHead, TrustBadges } from "@/components/Blocks";
 import { PriceChange } from "@/components/PriceChange";
 import { Sparkline } from "@/components/PriceChart";
 import { LoginCTA } from "@/components/LoginCTA";
-import { Bell, Calendar, ChevronRight, Grid } from "@/components/Icons";
+import { PackArt } from "@/components/PackArt";
+import { PACK, SELLBACK, TIERS, TIER_ORDER } from "@/lib/rip";
+import { Bell, Calendar, ChevronRight, Grid, Sparkle } from "@/components/Icons";
 
 const POPULAR = ["Celestial Tides", "199/165", "Marcus Hale RC", "1st Edition holo", "PSA 10 under $100"];
 const INDEXES = [
@@ -78,6 +80,32 @@ export default function Home() {
           <h2 id="trending" className="sr-only">Trending cards</h2>
           <div className="scroll-row">
             {trending.map((c) => <div key={c.slug} className="w-[44%] shrink-0 sm:w-[30%] md:w-[22%] lg:w-[calc((100%-4rem)/5)]"><CardTile card={c} /></div>)}
+          </div>
+        </section>
+
+        {/* DIGITAL RIPS */}
+        <section aria-labelledby="rip-h" className="panel relative overflow-hidden p-6 md:p-10">
+          <div aria-hidden className="pointer-events-none absolute -left-24 -top-24 h-72 w-72 rounded-full bg-gold/10 blur-3xl" />
+          <div className="relative grid items-center gap-8 md:grid-cols-[1.3fr_1fr]">
+            <div>
+              <p className="eyebrow">New · digital packs, real cards</p>
+              <h2 id="rip-h" className="mt-3 text-2xl font-bold tracking-tight md:text-3xl">Rip a pack. Keep the card or sell it back.</h2>
+              <p className="mt-3 max-w-xl text-sm leading-relaxed text-muted">
+                Every pull is a real card held in the Mintori vault. Odds are published before you buy, and you can sell any pull
+                back instantly for {SELLBACK * 100}% of its market value.
+              </p>
+              <ul className="mt-4 flex flex-wrap gap-2">
+                {TIER_ORDER.map((t) => (
+                  <li key={t} className="num flex items-center gap-1.5 rounded-full border border-line px-3 py-1 text-xs text-muted">
+                    <span className="h-2 w-2 rounded-full" style={{ background: TIERS[t].color }} />{TIERS[t].label} {TIERS[t].odds}%
+                  </li>
+                ))}
+              </ul>
+              <Link href="/rip" className="btn-primary mt-6"><Sparkle size={16} /> Rip a pack · <span className="num">{fmtUSD(PACK.price, true)}</span></Link>
+            </div>
+            <Link href="/rip" aria-label={`Open the ${PACK.name}`} className="mx-auto block w-40 rotate-3 transition hover:rotate-0 md:w-48">
+              <PackArt name={PACK.name.replace(" Pack", "")} price={fmtUSD(PACK.price, true)} />
+            </Link>
           </div>
         </section>
 
@@ -161,10 +189,11 @@ export default function Home() {
         {/* TRANSPARENCY */}
         <section className="grid gap-8 md:grid-cols-[1fr_1.4fr] md:items-center">
           <div>
-            <h2 className="h-section">Collecting, not gambling.</h2>
+            <h2 className="h-section">Open odds. Real cards.</h2>
             <p className="mt-2 text-sm leading-relaxed text-muted">
-              You always see the card you’re buying, the seller, and the price history behind it. Our market prices are the
-              median of verified completed sales over the last 30 days — methodology published, no hidden odds.
+              On the marketplace you always see the card, the seller, and the price history behind it. On digital packs you
+              see the exact odds and value range before you rip. Market prices are the median of verified completed sales
+              over the last 30 days — methodology published, nothing hidden.
             </p>
             <Link href="#" className="mt-3 inline-flex items-center gap-1 text-sm font-semibold text-gold-text hover:underline">How we price <ChevronRight size={16} /></Link>
           </div>
