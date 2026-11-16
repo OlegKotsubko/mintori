@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { CARDS, GAMES, cardsInSet, getCard, getSet, listingsFor } from "@/lib/data";
+import { CARDS, GAMES, allCards, cardsInSet, getCard, getSet, listingsFor } from "@/lib/data";
 import { fmtUSD } from "@/lib/format";
 import { CardDetail } from "./CardDetail";
 
 export function generateStaticParams() {
-  return CARDS.map((c) => ({ slug: c.slug }));
+  // Featured cards and every card listed on a set page; `output: "export"` needs them all up front.
+  return allCards().map((c) => ({ slug: c.slug }));
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {

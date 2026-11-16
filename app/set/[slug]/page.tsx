@@ -60,7 +60,7 @@ export default async function SetPage({ params }: { params: Promise<{ slug: stri
         <SetBrowser cards={cards} total={set.total} />
 
         <section id="sealed" className="mt-16 scroll-mt-24">
-          <SectionHead title={`Sealed ${set.name} products`} sub="Factory-sealed · authenticity guaranteed" />
+          <SectionHead title={`Sealed ${set.name} products`} sub="Factory-sealed · authenticity guaranteed" href="/rip" cta="Rip a pack digitally" />
           {sealed.length ? (
             <div className="grid gap-3 sm:grid-cols-3 lg:grid-cols-4">{sealed.map((p) => <SealedTile key={p.slug} p={p} />)}</div>
           ) : <p className="text-sm text-muted">No sealed products listed for this set yet.</p>}

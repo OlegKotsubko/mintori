@@ -237,7 +237,20 @@ export const SEALED: SealedProduct[] = [
   { slug: "heritage-diamond-hobby", name: "2026 Heritage Diamond Hobby Box", setSlug: "2026-heritage-diamond-baseball", kind: "Hobby Box", price: 112.0, change7d: 1.9, hue: 0 },
 ];
 
-export const getCard = (slug: string) => CARDS.find((c) => c.slug === slug);
+/** Every card that has a page: the featured cards plus the generated list of each set.
+ *  Set pages link to all of them, so card pages must exist for all of them. */
+let allCardsCache: Card[] | null = null;
+export function allCards(): Card[] {
+  if (!allCardsCache) {
+    const bySlug = new Map<string, Card>();
+    for (const c of CARDS) bySlug.set(c.slug, c);
+    for (const s of SETS) for (const c of cardsInSet(s)) if (!bySlug.has(c.slug)) bySlug.set(c.slug, c);
+    allCardsCache = [...bySlug.values()];
+  }
+  return allCardsCache;
+}
+
+export const getCard = (slug: string) => allCards().find((c) => c.slug === slug);
 export const getSet = (slug: string) => SETS.find((s) => s.slug === slug);
 
 /* --- collection ----------------------------------------------------------- */

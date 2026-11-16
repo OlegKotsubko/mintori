@@ -4,7 +4,7 @@ import { usePathname } from "next/navigation";
 import { cx } from "@/lib/format";
 import { useApp } from "./Providers";
 import { SearchBar } from "./SearchBar";
-import { Cart, Grid, Logo, Moon, Search, Sun, User } from "./Icons";
+import { Cart, Grid, Logo, Moon, Search, Sparkle, Sun, User } from "./Icons";
 
 const NAV = [
   { href: "/set/celestial-tides", label: "Pokémon" },
@@ -12,6 +12,7 @@ const NAV = [
   { href: "/set/2025-26-summit-select-basketball", label: "Basketball" },
   { href: "/set/2026-heritage-diamond-baseball", label: "Baseball" },
   { href: "/#releases", label: "Releases" },
+  { href: "/rip", label: "Rip packs" },
 ];
 
 export function Header() {
@@ -25,13 +26,13 @@ export function Header() {
           <Link href="/" aria-label="Mintori home"><Logo /></Link>
           <nav aria-label="Primary" className="hidden items-center gap-1 lg:flex">
             {NAV.map((n) => (
-              <Link key={n.label} href={n.href} className={cx("rounded-lg px-3 py-2 text-sm font-medium text-muted hover:bg-surface hover:text-ink", path === n.href && "text-ink")}>{n.label}</Link>
+              <Link key={n.label} href={n.href} className={cx("whitespace-nowrap rounded-lg px-3 py-2 text-sm font-medium text-muted hover:bg-surface hover:text-ink", path === n.href && "text-ink")}>{n.label}</Link>
             ))}
           </nav>
           <div className={cx("ml-auto hidden max-w-sm flex-1 md:block", home && "md:hidden")}><SearchBar /></div>
           <div className={cx("ml-auto flex items-center gap-1", !home && "md:ml-0")}>
             <Link href="/" className="btn-ghost h-10 w-10 px-0 md:hidden" aria-label="Search"><Search /></Link>
-            <Link href="/collection" className="btn-ghost hidden h-10 md:inline-flex"><Grid size={17} /> My collection</Link>
+            <Link href="/collection" aria-label="My collection" className="btn-ghost hidden h-10 md:inline-flex"><Grid size={17} /> <span className="lg:hidden xl:inline">My collection</span></Link>
             <button onClick={toggleTheme} className="btn-ghost h-10 w-10 px-0" aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} theme`}>
               {theme === "dark" ? <Sun /> : <Moon />}
             </button>
@@ -46,9 +47,10 @@ export function Header() {
 
       {/* Mobile bottom tab bar (thumb-reachable on 375px) */}
       <nav aria-label="Mobile" className="fixed inset-x-0 bottom-0 z-40 border-t border-line bg-bg/95 pb-[env(safe-area-inset-bottom)] backdrop-blur-xl md:hidden">
-        <ul className="grid grid-cols-4">
+        <ul className="grid grid-cols-5">
           {[
             { href: "/", label: "Home", Icon: Search },
+            { href: "/rip", label: "Rip", Icon: Sparkle },
             { href: "/collection", label: "Collection", Icon: Grid },
             { href: "/cart", label: "Cart", Icon: Cart },
           ].map(({ href, label, Icon }) => (

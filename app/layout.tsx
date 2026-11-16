@@ -16,7 +16,7 @@ export const metadata: Metadata = {
   openGraph: { siteName: "Mintori", type: "website", images: [ogImage] },
   twitter: { card: "summary_large_image", images: [ogImage] },
   title: { default: "Mintori — Trading card prices, marketplace & collection tracker", template: "%s | Mintori" },
-  description: "Transparent prices for Pokémon TCG and sports cards. Buy from verified sellers with insured shipping, and track your collection’s value for free.",
+  description: "Transparent prices for Pokémon TCG and sports cards. Buy from verified sellers with insured shipping, rip digital packs with published odds, and track your collection’s value for free.",
 };
 export const viewport: Viewport = { themeColor: "#0B0C0F", width: "device-width", initialScale: 1 };
 
@@ -25,10 +25,12 @@ const themeInit = `try{if(localStorage.getItem('mintori-theme')==='light')docume
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en-US" suppressHydrationWarning>
-      <head><script dangerouslySetInnerHTML={{ __html: themeInit }} /></head>
+      <head>
+        <title></title>
+        <script dangerouslySetInnerHTML={{ __html: themeInit }} />
+      </head>
       <body className="min-h-screen pb-16 md:pb-0">
         <Providers>
-          <a href="#main" className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded-lg focus:bg-gold focus:px-3 focus:py-2 focus:text-gold-ink">Skip to content</a>
           <Header />
           <main id="main">{children}</main>
           <Footer />
@@ -40,7 +42,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
 function Footer() {
   const cols = [
-    { h: "Marketplace", l: ["Pokémon TCG", "Football", "Basketball", "Baseball", "Sealed products"] },
+    { h: "Marketplace", l: ["Pokémon TCG", "Football", "Basketball", "Baseball", "Sealed products", "Digital packs"] },
     { h: "Price guide", l: ["Trending cards", "Set index", "Population reports", "Grading ROI calculator"] },
     { h: "Mintori", l: ["How we price", "Seller standards", "Buyer protection", "Help center"] },
   ];
@@ -51,7 +53,7 @@ function Footer() {
         <div className="mt-10 grid gap-10 md:grid-cols-[1.4fr_repeat(3,1fr)]">
           <div>
             <Logo />
-            <p className="mt-3 max-w-xs text-sm text-muted">The trusted price guide and marketplace for collectors. Real cards, real prices — no digital rips, no gambling.</p>
+            <p className="mt-3 max-w-xs text-sm text-muted">The trusted price guide and marketplace for collectors. Real cards, real prices — and digital rips with published odds and instant sell-back.</p>
           </div>
           {cols.map((c) => (
             <div key={c.h}>
@@ -62,7 +64,7 @@ function Footer() {
         </div>
         <p className="mt-12 text-xs leading-relaxed text-faint">
           © 2026 Mintori, Inc. · Serving collectors in the United States. Prices are market estimates based on completed sales and are not financial advice.
-          All card names and artwork shown are placeholders. Mintori is not affiliated with any card manufacturer, league or grading company.
+          Digital packs are for adults 18+ where available. All card names and artwork shown are placeholders. Mintori is not affiliated with any card manufacturer, league or grading company.
         </p>
       </div>
     </footer>
