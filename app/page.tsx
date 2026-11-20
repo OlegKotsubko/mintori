@@ -34,6 +34,11 @@ export default function Home() {
         <div aria-hidden className="pointer-events-none absolute inset-0 bg-[radial-gradient(60%_60%_at_70%_0%,rgb(var(--gold)/0.12),transparent_70%)]" />
         <div className="container relative grid items-center gap-10 py-12 md:py-20 lg:grid-cols-[1.15fr_1fr]">
           <div>
+            <Link href="/grading" className="group mb-5 inline-flex items-center gap-2 rounded-full border border-gold/40 bg-gold/10 py-1 pl-1 pr-3 text-xs font-medium text-ink hover:border-gold">
+              <span className="rounded-full bg-gold px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-gold-ink">New</span>
+              From card to slab: how grading sets a price
+              <ChevronRight size={14} className="text-gold-text transition-transform group-hover:translate-x-0.5" />
+            </Link>
             <p className="eyebrow">Price guide + marketplace · Pokémon &amp; US sports cards</p>
             <h1 className="mt-4 text-[34px] font-extrabold leading-[1.05] tracking-tight sm:text-5xl lg:text-[56px]">
               Know what every card <br className="hidden sm:block" />is <span className="holo-text">really</span> worth.
